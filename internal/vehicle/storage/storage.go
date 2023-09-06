@@ -1,0 +1,58 @@
+package storage
+
+import "errors"
+
+// VehicleAttributes is an struct that represents the attributes of a vehicle.
+type VehicleAttributes struct {
+	// Brand is the brand of the vehicle.
+	Brand 		 string
+	// Model is the model of the vehicle.
+	Model 		 string
+	// Registration is the registration of the vehicle.
+	Registration string
+	// Year is the fabrication year of the vehicle.
+	Year 		 int
+	// Color is the color of the vehicle.
+	Color 		 string
+
+	// MaxSpeed is the maximum speed of the vehicle.
+	MaxSpeed 	 int
+	// FuelType is the fuel type of the vehicle.
+	FuelType 	 string
+	// Transmission is the transmission of the vehicle.
+	Transmission string
+
+	// Passengers is the capacity of passengers of the vehicle.
+	Passengers 	 int
+
+	// Height is the height of the vehicle.
+	Height 		 int
+	// Width is the width of the vehicle.
+	Width 		 int
+
+	// Weight is the weight of the vehicle.
+	Weight 		 int
+}
+
+// Vehicle is an struct that represents a vehicle.
+type Vehicle struct {
+	// ID is the unique identifier of the vehicle.
+	Id 			 int
+	
+	// Attributes is the attributes of the vehicle.
+	Attributes 	 VehicleAttributes
+}
+
+// StorageVehicle is the interface that wraps the basic methods for a vehicle storage.
+type StorageVehicle interface {
+	// GetAll returns all vehicles
+	GetAll() (v []*Vehicle, err error)
+}
+
+var (
+	// ErrStorageVehicleInternal is returned when an internal error occurs.
+	ErrStorageVehicleInternal = errors.New("internal error")
+
+	// ErrStorageVehicleNotFound is returned when a vehicle is not found.
+	ErrStorageVehicleNotFound = errors.New("vehicle not found")
+)
