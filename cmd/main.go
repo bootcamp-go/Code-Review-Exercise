@@ -12,8 +12,7 @@ func main() {
 	// ...
 
 	// dependencies
-	dbVh := make(map[int]*storage.VehicleAttributes)
-	stVh := storage.NewStorageVehicleInMemory(dbVh)
+	stVh := storage.NewStorageVehicleJSONFile("./docs/db/json/vehicles_100.json")
 	ctVh := handlers.NewControllerVehicle(stVh)
 
 	// server
@@ -24,7 +23,7 @@ func main() {
 	// -> handlers
 	api  := rt.Group("/api/v1")
 	grVh := api.Group("/vehicles")
-	grVh.GET("/", ctVh.GetAll())
+	grVh.GET("", ctVh.GetAll())
 
 	// run
 	if err := rt.Run(":8080"); err != nil {
