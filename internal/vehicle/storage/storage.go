@@ -26,12 +26,12 @@ type VehicleAttributes struct {
 	Passengers 	 int
 
 	// Height is the height of the vehicle.
-	Height 		 int
+	Height 		 float64
 	// Width is the width of the vehicle.
-	Width 		 int
+	Width 		 float64
 
 	// Weight is the weight of the vehicle.
-	Weight 		 int
+	Weight 		 float64
 }
 
 // Vehicle is an struct that represents a vehicle.

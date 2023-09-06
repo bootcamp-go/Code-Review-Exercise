@@ -31,9 +31,9 @@ type VehicleHandlerGetAll struct {
 	FuelType		string	`json:"fuel_type"`
 	Transmission	string	`json:"transmission"`
 	Passengers 		int		`json:"passengers"`
-	Height			int		`json:"height"`
-	Width			int		`json:"width"`
-	Weight			int		`json:"weight"`
+	Height			float64	`json:"height"`
+	Width			float64	`json:"width"`
+	Weight			float64	`json:"weight"`
 }
 type ResponseBodyGetAll struct {
 	Message	string			   		`json:"message"`
