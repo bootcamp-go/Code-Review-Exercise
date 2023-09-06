@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"app/internal/vehicle/storage"
+	"errors"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -44,9 +46,43 @@ func (c *ControllerVehicle) GetAll() (gin.HandlerFunc) {
 		// ...
 		
 		// process
-		// ...
+		vehicles, err := c.st.GetAll()
+		if err != nil {
+			var code int; var body *ResponseBodyGetAll
+			switch {
+			case errors.Is(err, storage.ErrStorageVehicleNotFound):
+				code = http.StatusNotFound
+				body = &ResponseBodyGetAll{Message: "Not found", Error: true}
+			default:
+				code = http.StatusInternalServerError
+				body = &ResponseBodyGetAll{Message: "Internal server error", Error: true}
+			}
+
+			ctx.JSON(code, body)
+			return
+		}
 
 		// response
-		// ...
+		code := http.StatusOK
+		body := &ResponseBodyGetAll{Message: "Success", Data: make([]*VehicleHandlerGetAll, len(vehicles)), Error: false}
+		for _, vehicle := range vehicles {
+			body.Data = append(body.Data, &VehicleHandlerGetAll{
+				Id:				vehicle.Id,
+				Brand:			vehicle.Attributes.Brand,
+				Model:			vehicle.Attributes.Model,
+				Registration:	vehicle.Attributes.Registration,
+				Year:			vehicle.Attributes.Year,
+				Color:			vehicle.Attributes.Color,
+				MaxSpeed:		vehicle.Attributes.MaxSpeed,
+				FuelType:		vehicle.Attributes.FuelType,
+				Transmission:	vehicle.Attributes.Transmission,
+				Passengers:		vehicle.Attributes.Passengers,
+				Height:			vehicle.Attributes.Height,
+				Width:			vehicle.Attributes.Width,
+				Weight:			vehicle.Attributes.Weight,
+			})
+		}
+
+		ctx.JSON(code, body)
 	}
 }
