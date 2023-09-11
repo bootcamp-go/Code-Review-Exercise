@@ -2,18 +2,22 @@ package main
 
 import (
 	"app/cmd/handlers"
-	"app/internal/vehicle/storage"
+	"app/internal/vehicle/repository"
+	"app/internal/vehicle/service"
+	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
 	// env
-	// ...
+	godotenv.Load(".env")
 
 	// dependencies
-	stVh := storage.NewStorageVehicleJSONFile("./docs/db/json/vehicles_100.json")
-	ctVh := handlers.NewControllerVehicle(stVh)
+	rpVh := repository.NewRepositoryVehicleJSONFile(os.Getenv("FILE_PATH_VEHICLES_JSON"))
+	svVh := service.NewServiceVehicleDefault(rpVh)
+	ctVh := handlers.NewControllerVehicle(svVh)
 
 	// server
 	rt := gin.New()
@@ -26,7 +30,7 @@ func main() {
 	grVh.GET("", ctVh.GetAll())
 
 	// run
-	if err := rt.Run(":8080"); err != nil {
+	if err := rt.Run(os.Getenv("SERVER_ADDR")); err != nil {
 		panic(err)
 	}
 }

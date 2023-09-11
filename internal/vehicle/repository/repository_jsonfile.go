@@ -1,22 +1,24 @@
-package storage
+package repository
 
 import (
+	"app/internal/domain"
 	"encoding/json"
 	"fmt"
 	"os"
 )
 
-// NewStorageVehicleJSONFile returns a new instance of a vehicle storage using JSON files.
-func NewStorageVehicleJSONFile(path string) *StorageVehicleJSONFile {
-	return &StorageVehicleJSONFile{Path: path}
+// NewRepositoryVehicleJSONFile returns a new instance of a vehicle repository using JSON files.
+func NewRepositoryVehicleJSONFile(path string) *RepositoryVehicleJSONFile {
+	return &RepositoryVehicleJSONFile{Path: path}
 }
 
-// StorageVehicleJSONFile is an struct that represents a vehicle storage using JSON files.
-type StorageVehicleJSONFile struct {
+// RepositoryVehicleJSONFile is an struct that represents a vehicle repository using JSON files.
+type RepositoryVehicleJSONFile struct {
 	// Path is the path of the JSON file.
 	Path string
 }
 
+// VehicleJSON is an struct that represents a vehicle in JSON format.
 type VehicleJSON struct {
 	Id 			 int		`json:"id"`
 	Brand 		 string		`json:"brand"`
@@ -34,11 +36,11 @@ type VehicleJSON struct {
 }
 
 // GetAll returns all vehicles.
-func (st *StorageVehicleJSONFile) GetAll() (v []*Vehicle, err error) {
+func (rp *RepositoryVehicleJSONFile) GetAll() (v []*domain.Vehicle, err error) {
 	// open file
-	f, err := os.Open(st.Path)
+	f, err := os.Open(rp.Path)
 	if err != nil {
-		err = fmt.Errorf("%w. %v", ErrStorageVehicleInternal, err)
+		err = fmt.Errorf("%w. %v", ErrRepositoryVehicleInternal, err)
 		return
 	}
 	defer f.Close()
@@ -47,22 +49,22 @@ func (st *StorageVehicleJSONFile) GetAll() (v []*Vehicle, err error) {
 	var vj []*VehicleJSON
 	err = json.NewDecoder(f).Decode(&vj)
 	if err != nil {
-		err = fmt.Errorf("%w. %v", ErrStorageVehicleInternal, err)
+		err = fmt.Errorf("%w. %v", ErrRepositoryVehicleInternal, err)
 		return
 	}
 
 	// check if there are vehicles
 	if len(vj) == 0 {
-		err = fmt.Errorf("%w. %v", ErrStorageVehicleNotFound, err)
+		err = fmt.Errorf("%w. %v", ErrRepositoryVehicleNotFound, err)
 		return
 	}
 
 	// serialization
-	v = make([]*Vehicle, len(vj))
+	v = make([]*domain.Vehicle, len(vj))
 	for i, vehicle := range vj {
-		v[i] = &Vehicle{
+		v[i] = &domain.Vehicle{
 			Id: vehicle.Id,
-			Attributes: VehicleAttributes{
+			Attributes: domain.VehicleAttributes{
 				Brand: vehicle.Brand,
 				Model: vehicle.Model,
 				Registration: vehicle.Registration,

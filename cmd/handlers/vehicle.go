@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"app/internal/vehicle/storage"
+	"app/internal/vehicle/service"
 	"errors"
 	"net/http"
 
@@ -9,14 +9,14 @@ import (
 )
 
 // NewControllerVehicle returns a new instance of a vehicle controller.
-func NewControllerVehicle(st storage.StorageVehicle) *ControllerVehicle {
+func NewControllerVehicle(st service.ServiceVehicle) *ControllerVehicle {
 	return &ControllerVehicle{st: st}
 }
 
 // ControllerVehicle is an struct that represents a vehicle controller.
 type ControllerVehicle struct {
 	// StorageVehicle is the storage of vehicles.
-	st storage.StorageVehicle
+	st service.ServiceVehicle
 }
 
 // GetAll returns all vehicles.
@@ -50,7 +50,7 @@ func (c *ControllerVehicle) GetAll() (gin.HandlerFunc) {
 		if err != nil {
 			var code int; var body *ResponseBodyGetAll
 			switch {
-			case errors.Is(err, storage.ErrStorageVehicleNotFound):
+			case errors.Is(err, service.ErrServiceVehicleNotFound):
 				code = http.StatusNotFound
 				body = &ResponseBodyGetAll{Message: "Not found", Error: true}
 			default:

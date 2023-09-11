@@ -1,6 +1,4 @@
-package storage
-
-import "errors"
+package domain
 
 // VehicleAttributes is an struct that represents the attributes of a vehicle.
 type VehicleAttributes struct {
@@ -42,17 +40,3 @@ type Vehicle struct {
 	// Attributes is the attributes of the vehicle.
 	Attributes 	 VehicleAttributes
 }
-
-// StorageVehicle is the interface that wraps the basic methods for a vehicle storage.
-type StorageVehicle interface {
-	// GetAll returns all vehicles
-	GetAll() (v []*Vehicle, err error)
-}
-
-var (
-	// ErrStorageVehicleInternal is returned when an internal error occurs.
-	ErrStorageVehicleInternal = errors.New("internal error")
-
-	// ErrStorageVehicleNotFound is returned when a vehicle is not found.
-	ErrStorageVehicleNotFound = errors.New("vehicle not found")
-)
