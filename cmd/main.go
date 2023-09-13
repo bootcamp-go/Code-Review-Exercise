@@ -2,6 +2,7 @@ package main
 
 import (
 	"app/cmd/handlers"
+	"app/internal/vehicle/loader"
 	"app/internal/vehicle/repository"
 	"app/internal/vehicle/service"
 	"os"
@@ -15,7 +16,13 @@ func main() {
 	godotenv.Load(".env")
 
 	// dependencies
-	rpVh := repository.NewRepositoryVehicleJSONFile(os.Getenv("FILE_PATH_VEHICLES_JSON"))
+	ldVh := loader.NewLoaderVehicleJSON(os.Getenv("FILE_PATH_VEHICLES_JSON"))
+	dbVh, err := ldVh.Load()
+	if err != nil {
+		panic(err)
+	}
+
+	rpVh := repository.NewRepositoryVehicleInMemory(dbVh)
 	svVh := service.NewServiceVehicleDefault(rpVh)
 	ctVh := handlers.NewControllerVehicle(svVh)
 

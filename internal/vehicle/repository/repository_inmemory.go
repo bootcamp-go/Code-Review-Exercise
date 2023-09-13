@@ -21,8 +21,12 @@ func (s *RepositoryVehicleInMemory) GetAll() (v []*domain.Vehicle, err error) {
 	}
 
 	// get all vehicles from the database
+	v = make([]*domain.Vehicle, 0, len(s.db))
 	for key, value := range s.db {
-		v = append(v, &domain.Vehicle{Id: key, Attributes: *value})
+		v = append(v, &domain.Vehicle{
+			Id:			key,
+			Attributes:	*value,
+		})
 	}
 
 	return
