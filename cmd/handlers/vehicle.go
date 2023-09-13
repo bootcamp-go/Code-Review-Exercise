@@ -48,14 +48,14 @@ func (c *ControllerVehicle) GetAll() (gin.HandlerFunc) {
 		// process
 		vehicles, err := c.st.GetAll()
 		if err != nil {
-			var code int; var body *ResponseBodyGetAll
+			var code int; var body ResponseBodyGetAll
 			switch {
 			case errors.Is(err, service.ErrServiceVehicleNotFound):
 				code = http.StatusNotFound
-				body = &ResponseBodyGetAll{Message: "Not found", Error: true}
+				body = ResponseBodyGetAll{Message: "Not found", Error: true}
 			default:
 				code = http.StatusInternalServerError
-				body = &ResponseBodyGetAll{Message: "Internal server error", Error: true}
+				body = ResponseBodyGetAll{Message: "Internal server error", Error: true}
 			}
 
 			ctx.JSON(code, body)
@@ -64,7 +64,7 @@ func (c *ControllerVehicle) GetAll() (gin.HandlerFunc) {
 
 		// response
 		code := http.StatusOK
-		body := &ResponseBodyGetAll{Message: "Success", Data: make([]*VehicleHandlerGetAll, len(vehicles)), Error: false}
+		body := ResponseBodyGetAll{Message: "Success", Data: make([]*VehicleHandlerGetAll, 0, len(vehicles)), Error: false}
 		for _, vehicle := range vehicles {
 			body.Data = append(body.Data, &VehicleHandlerGetAll{
 				Id:				vehicle.Id,
