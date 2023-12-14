@@ -3,17 +3,20 @@ package main
 import (
 	"app/internal/application"
 	"fmt"
+	"os"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
 	// env
-	// ...
+	godotenv.Load()
 
 	// app
 	// - config
 	cfg := &application.ConfigDefaultInMemory{
-		FileLoader: "./docs/db/vehicles_100.json",
-		Addr:       ":8080",
+		FileLoader: os.Getenv("PATH_FILE_LOADER_VEHICLES"),
+		Addr:       os.Getenv("SERVER_ADDR"),
 	}
 	// - app
 	app := application.NewDefaultInMemory(cfg)
