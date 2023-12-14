@@ -1,4 +1,4 @@
-package domain
+package internal
 
 // VehicleAttributes is an struct that represents the attributes of a vehicle.
 type VehicleAttributes struct {
@@ -35,8 +35,7 @@ type VehicleAttributes struct {
 // Vehicle is an struct that represents a vehicle.
 type Vehicle struct {
 	// ID is the unique identifier of the vehicle.
-	Id 			 int
-	
+	ID 			 int
 	// Attributes is the attributes of the vehicle.
 	Attributes 	 VehicleAttributes
 }
